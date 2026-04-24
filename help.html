@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Is the AI slow? — Troubleshooting Guide</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      color: #1a1a1a;
+      background: #f5f7fa;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      color: #0b3d91;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #0b3d91;
+      margin-bottom: 1.5rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #0b3d91;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 2px solid #e8f0fe;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-top: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin-bottom: 0.75rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .engine-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+    }
+
+    .engine-badge.webgpu {
+      background: #e8f0fe;
+      color: #1a56db;
+    }
+
+    .engine-badge.chrome {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    ol, ul {
+      margin: 0.5rem 0 1rem 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    code {
+      background: #f0f0f0;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.9em;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+
+    .step-img {
+      display: block;
+      margin: 0.75rem 0;
+      padding: 0.75rem 1rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .tip {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+      padding: 0.75rem 1rem;
+      border-radius: 0 6px 6px 0;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+
+    .warning {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 0.75rem 1rem;
+      border-radius: 0 6px 6px 0;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 1rem 0.75rem; }
+      h1 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back-link">← Back to app</a>
+
+    <h1>Is the AI slow? — Troubleshooting Guide</h1>
+
+    <p>This app runs AI models directly in your browser. Performance depends on which engine is active and how your system is configured. Below are the most common causes of slow inference and how to fix them.</p>
+
+    <!-- ── WebGPU / web-llm Section ──────────────────────── -->
+
+    <div class="card">
+      <span class="engine-badge webgpu">WebGPU / web-llm</span>
+
+      <h2>Using the wrong GPU</h2>
+
+      <p>On systems with multiple GPUs (e.g. a laptop with both Intel integrated and NVIDIA discrete graphics), Windows may route the browser to the slower integrated GPU by default. This is the most common reason for slow WebGPU inference.</p>
+
+      <h3>How to check</h3>
+      <p>Look at the <strong>GPU</strong> dropdown in the chat header. The label after "→ using:" shows which GPU the browser is actually using. If it says something like <code>intel</code> instead of your discrete GPU, the browser is using the wrong one.</p>
+
+      <h3>Fix: Windows Graphics Settings</h3>
+      <ol>
+        <li>Open <strong>Settings → System → Display → Graphics</strong> (or search for "Graphics settings" in the Start menu).</li>
+        <li>Click <strong>"Browse"</strong> and find your browser executable:
+          <ul>
+            <li>Chrome: <code>C:\Program Files\Google\Chrome\Application\chrome.exe</code></li>
+            <li>Edge: <code>C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe</code></li>
+          </ul>
+        </li>
+        <li>Click the browser entry, then <strong>"Options"</strong>.</li>
+        <li>Select <strong>"High performance"</strong> and click <strong>Save</strong>.</li>
+        <li><strong>Restart the browser</strong> for the change to take effect.</li>
+      </ol>
+
+      <div class="tip">
+        <strong>Tip:</strong> After changing this, reload the app and check the GPU label again. It should now show your discrete GPU (e.g. <code>nvidia</code>).
+      </div>
+
+      <h3>Fix: NVIDIA Control Panel</h3>
+      <p>If you have an NVIDIA GPU, you can also force it per-application:</p>
+      <ol>
+        <li>Right-click the desktop → <strong>NVIDIA Control Panel</strong>.</li>
+        <li>Go to <strong>Manage 3D settings → Program Settings</strong>.</li>
+        <li>Add your browser and set <strong>"Preferred graphics processor"</strong> to <strong>"High-performance NVIDIA processor"</strong>.</li>
+      </ol>
+
+      <h2>Model is too large</h2>
+      <p>Larger models need more VRAM and take longer to run. If inference is slow, try a smaller model from the dropdown. Models marked with <strong>★</strong> are already downloaded and will load instantly. Look for models with lower VRAM requirements (shown in MB next to each model name).</p>
+
+      <div class="tip">
+        <strong>Recommended small models:</strong> SmolLM2-360M or Qwen2.5-0.5B variants are fast even on integrated GPUs. Gemma-2-2B is a good balance of quality and speed on discrete GPUs.
+      </div>
+
+      <h2>First-time model download</h2>
+      <p>The first time you use a model, it needs to be downloaded (typically 200 MB – 6 GB depending on the model). This is a one-time cost — subsequent loads use the browser cache. You can see the download progress in the chat status area.</p>
+    </div>
+
+    <!-- ── Chrome Prompt API Section ─────────────────────── -->
+
+    <div class="card">
+      <span class="engine-badge chrome">Chrome Built-in AI (Prompt API)</span>
+
+      <h2>Setting up Chrome's built-in AI</h2>
+
+      <p>Chrome 138+ includes a built-in AI model (Gemini Nano) that runs locally on your device. When available, this is the fastest option since it's deeply integrated into the browser. If it's not set up, the app falls back to WebGPU (web-llm) which requires downloading a separate model.</p>
+
+      <h3>How to enable it</h3>
+      <ol>
+        <li>Make sure you're running <strong>Chrome 138 or newer</strong>. Check your version at <code>chrome://version</code>.</li>
+        <li>Navigate to <code>chrome://flags/#optimization-guide-on-device-model</code> and set it to <strong>"Enabled BypassPerfRequirement"</strong>.</li>
+        <li>Navigate to <code>chrome://flags/#prompt-api-for-gemini-nano-multimodal-input</code> and set it to <strong>"Enabled"</strong>.</li>
+        <li><strong>Relaunch Chrome</strong> when prompted.</li>
+        <li>Wait for the model to download. You can check the status at <code>chrome://on-device-internals</code>.</li>
+      </ol>
+
+      <div class="warning">
+        <strong>Note:</strong> The model download happens in the background and can take several minutes. The Prompt API won't work until the download is complete. Check <code>chrome://on-device-internals</code> to see if the model status shows "Ready".
+      </div>
+
+      <h3>Why is Chrome AI not being used?</h3>
+      <p>If the app shows "(via WebGPU)" in timestamps or you see the model selector dropdown, it means Chrome's Prompt API was not detected. Common reasons:</p>
+      <ul>
+        <li>Chrome version is older than 138.</li>
+        <li>The flags above are not enabled.</li>
+        <li>The on-device model hasn't finished downloading yet.</li>
+        <li>You're using a different browser (Edge, Firefox) — the Prompt API is Chrome-only.</li>
+      </ul>
+    </div>
+
+    <!-- ── General Tips ──────────────────────────────────── -->
+
+    <div class="card">
+      <h2>General performance tips</h2>
+      <ul>
+        <li><strong>Close other GPU-heavy tabs</strong> — video streaming, games, or other WebGPU apps compete for GPU memory.</li>
+        <li><strong>Keep the browser updated</strong> — WebGPU performance improves with each browser release.</li>
+        <li><strong>Check your GPU drivers</strong> — outdated drivers can cause slow or broken WebGPU.</li>
+        <li><strong>Use a Chromium-based browser</strong> — Chrome and Edge have the most mature WebGPU implementations.</li>
+      </ul>
+    </div>
+
+    <a href="/" class="back-link">← Back to app</a>
+  </div>
+</body>
+</html>
