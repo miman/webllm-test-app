@@ -1,0 +1,21 @@
+{
+  "name": "cli-webgpu-chatbot",
+  "version": "1.0.0",
+  "description": "CLI chatbot powered by local GPU inference via node-llama-cpp",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc && node dist/index.js",
+    "chat": "node dist/index.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "node-llama-cpp": "^3.18.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}
