@@ -46,8 +46,8 @@ The app checks for Chrome's built-in Prompt API first. If unavailable, it falls 
 
 ```bash
 # Clone the repo
-git clone <repo-url>
-cd <repo-folder>
+git clone https://github.com/miman/webllm-test-app
+cd webllm-test-app
 
 # Start the local server
 npm start 
