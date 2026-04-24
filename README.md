@@ -55,21 +55,11 @@ npm start
 
 Then open [http://localhost:3000](http://localhost:3000).
 
-## Enabling Chrome's Prompt API
+## How to configure the browser to use AI
 
-To use the primary (fastest) AI engine, enable these Chrome flags:
-
-1. Navigate to `chrome://flags/#optimization-guide-on-device-model` → set to **Enabled BypassPerfRequirement**
-2. Navigate to `chrome://flags/#prompt-api-for-gemini-nano-multimodal-input` → set to **Enabled**
-3. Relaunch Chrome
-4. Check model download status at `chrome://on-device-internals`
-
-If these flags aren't available or the model hasn't downloaded, the app will automatically use the WebGPU fallback.
+The browser might not always use the correct GPU or if you use Chrome browser you need to do some configuration changes.
+Click on the "Is the AI slow ?" link in the bottom of the page in the app to see how to fix those things.
 
 ## Project Information
 
 For detailed information about the project structure and technology stack, see [docs/project-info.md](docs/project-info.md).
-
-## License
-
-This project is provided as-is for educational and personal use.
